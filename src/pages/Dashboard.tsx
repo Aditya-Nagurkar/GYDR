@@ -4,7 +4,6 @@ import GlassMorphicBox from '../components/GlassMorphicBox';
 import { mockAssessments } from '../data/mockData';
 import { UserProfile } from '../types';
 import { Brain, Code2, Heart } from 'lucide-react';
-import { useState } from 'react';
 
 interface DashboardProps {
   userName: string;
