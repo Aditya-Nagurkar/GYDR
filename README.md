@@ -34,7 +34,7 @@ GYDR is an AI-powered career guidance application that helps users discover thei
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/GYDR.git
+git clone https://github.com/Aditya-Nagurkar/GYDR.git
 ```
 
 2. Install dependencies:
