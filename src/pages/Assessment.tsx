@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import GlassMorphicBox from '../components/GlassMorphicBox';
 import GradientButton from '../components/GradientButton';
 import { mockQuestions } from '../data/mockData';
-import { Question, UserProfile } from '../types';
+import { UserProfile } from '../types';
 import { ArrowLeft } from 'lucide-react';
 
 interface AssessmentProps {
@@ -67,7 +67,7 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
             const openness = personalityTraits.find(t => t.trait === 'Openness');
             if (openness) {
               openness.score = Math.round((openness.score + answer) / 2);
-            }
+    }
           } else if (questionId === 'p12') {
             const agreeableness = personalityTraits.find(t => t.trait === 'Agreeableness');
             if (agreeableness) {
@@ -141,28 +141,28 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
       // Calculate final traits and update profile
       const results = calculateTraits();
       
-      updateUserProfile({
-        assessmentsCompleted: userProfile.assessmentsCompleted + 1,
+    updateUserProfile({
+      assessmentsCompleted: userProfile.assessmentsCompleted + 1,
         completedAssessments: [...userProfile.completedAssessments, id || ''],
         personalityTraits: results.personalityTraits,
         skills: results.skills,
         interests: results.interests
-      });
-
+    });
+    
       // Only navigate to results if all assessments are completed
       if (userProfile.assessmentsCompleted + 1 === userProfile.totalAssessments) {
-        navigate('/results');
+      navigate('/results');
       } else {
         navigate('/dashboard');
       }
     }
   };
 
-  if (!currentQuestion) return null;
+    if (!currentQuestion) return null;
 
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
-  return (
+        return (
     <div className="min-h-screen p-4 sm:p-6">
       <div className="max-w-2xl mx-auto">
         <button
@@ -196,28 +196,28 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
           {currentQuestion.type === 'scale' && (
             <div className="space-y-6">
               <div className="flex justify-between text-sm text-white/60">
-                <span>{currentQuestion.minLabel}</span>
-                <span>{currentQuestion.maxLabel}</span>
-              </div>
-              <div className="flex justify-between gap-2">
+              <span>{currentQuestion.minLabel}</span>
+              <span>{currentQuestion.maxLabel}</span>
+            </div>
+            <div className="flex justify-between gap-2">
                 {Array.from({ length: (currentQuestion.max || 5) - (currentQuestion.min || 1) + 1 }).map((_, index) => {
                   const value = (currentQuestion.min || 1) + index;
-                  return (
-                    <button
+                return (
+                  <button
                       key={value}
                       className={`flex-1 py-3 rounded-lg transition-colors ${
                         answers[currentQuestion.id] === value
                           ? 'bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white'
                           : 'bg-white/10 text-white/60 hover:bg-white/20'
-                      }`}
+                    }`}
                       onClick={() => handleAnswer(value)}
-                    >
-                      {value}
-                    </button>
-                  );
-                })}
-              </div>
+                  >
+                    {value}
+                  </button>
+                );
+              })}
             </div>
+          </div>
           )}
 
           {currentQuestion.type === 'choice' && (
@@ -235,24 +235,24 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
                   {option}
                 </button>
               ))}
-            </div>
+          </div>
           )}
 
           {currentQuestion.type === 'multiselect' && (
             <div className="space-y-3">
               {currentQuestion.options?.map((option, index) => {
                 const selectedAnswers = (answers[currentQuestion.id] as string[]) || [];
-                return (
-                  <button
+              return (
+                <button
                     key={index}
                     className={`w-full p-4 rounded-lg text-left transition-colors ${
                       selectedAnswers.includes(option)
                         ? 'bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white'
                         : 'bg-white/10 text-white/60 hover:bg-white/20'
-                    }`}
+                  }`}
                     onClick={() => handleMultiSelect(option)}
-                  >
-                    <div className="flex items-center">
+                >
+                  <div className="flex items-center">
                       <div className={`w-5 h-5 rounded border ${
                         selectedAnswers.includes(option)
                           ? 'border-white bg-white/20'
@@ -263,26 +263,26 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
                             <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
                           </svg>
                         )}
-                      </div>
-                      {option}
                     </div>
-                  </button>
-                );
-              })}
-            </div>
+                    {option}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
           )}
         </GlassMorphicBox>
 
         <div className="flex justify-end">
-          <GradientButton
-            onClick={handleNext}
+                  <GradientButton
+                    onClick={handleNext}
             disabled={!answers[currentQuestion.id] || 
               (currentQuestion.type === 'multiselect' && 
                (answers[currentQuestion.id] as string[])?.length === 0)}
-          >
+                  >
             {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Complete Assessment'}
-          </GradientButton>
-        </div>
+                  </GradientButton>
+                </div>
       </div>
     </div>
   );

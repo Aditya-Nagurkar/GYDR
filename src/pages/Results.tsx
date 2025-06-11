@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  RadarChart, PolarGrid, PolarAngleAxis, Radar, PieChart, Pie, Cell
+  ResponsiveContainer,
+  RadarChart, PolarGrid, PolarAngleAxis, Radar, PieChart, Pie, Cell, Tooltip
 } from 'recharts';
 import GlassMorphicBox from '../components/GlassMorphicBox';
-import GradientButton from '../components/GradientButton';
 import { mockCareerRecommendations } from '../data/mockData';
 import { UserProfile, CareerRecommendation } from '../types';
-import { ArrowLeft, BarChartBig, BookOpen, Briefcase } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { calculateCareerMatches } from '../utils/careerMatching';
 
 interface ResultsProps {
@@ -49,7 +48,7 @@ export default function Results({ userProfile }: ResultsProps) {
               fill="#8884d8"
               dataKey="value"
             >
-              {personalityData.map((entry, index) => (
+              {personalityData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
@@ -90,13 +89,13 @@ export default function Results({ userProfile }: ResultsProps) {
   return (
     <div className="min-h-screen p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
-        <button
+          <button
           className="flex items-center text-white/60 hover:text-white mb-6"
-          onClick={() => navigate('/dashboard')}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Dashboard
-        </button>
+            onClick={() => navigate('/dashboard')}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Dashboard
+          </button>
 
         <header className="mb-8">
           <h1 className="text-3xl font-bold mb-2">GYDR Assessment Results</h1>
@@ -108,7 +107,7 @@ export default function Results({ userProfile }: ResultsProps) {
         <div className="flex gap-4 mb-6">
           <button
             className={`px-4 py-2 rounded-lg transition-colors ${
-              activeTab === 'personality'
+              activeTab === 'personality' 
                 ? 'bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white'
                 : 'bg-white/10 text-white/60 hover:bg-white/20'
             }`}
@@ -118,7 +117,7 @@ export default function Results({ userProfile }: ResultsProps) {
           </button>
           <button
             className={`px-4 py-2 rounded-lg transition-colors ${
-              activeTab === 'skills'
+              activeTab === 'skills' 
                 ? 'bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white'
                 : 'bg-white/10 text-white/60 hover:bg-white/20'
             }`}
@@ -128,7 +127,7 @@ export default function Results({ userProfile }: ResultsProps) {
           </button>
           <button
             className={`px-4 py-2 rounded-lg transition-colors ${
-              activeTab === 'careers'
+              activeTab === 'careers' 
                 ? 'bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white'
                 : 'bg-white/10 text-white/60 hover:bg-white/20'
             }`}
@@ -139,70 +138,70 @@ export default function Results({ userProfile }: ResultsProps) {
         </div>
 
         <AnimatePresence mode="wait">
-          <motion.div
+            <motion.div
             key={activeTab}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
+              transition={{ duration: 0.3 }}
+            >
             {activeTab === 'personality' && (
               <GlassMorphicBox className="p-6">
                 <h2 className="text-xl font-semibold mb-6">Personality Traits Analysis</h2>
                 {renderPersonalityChart()}
               </GlassMorphicBox>
-            )}
+          )}
 
-            {activeTab === 'skills' && (
+          {activeTab === 'skills' && (
               <GlassMorphicBox className="p-6">
                 <h2 className="text-xl font-semibold mb-6">Skills Assessment Results</h2>
                 {renderSkillsChart()}
               </GlassMorphicBox>
-            )}
+          )}
 
-            {activeTab === 'careers' && (
+          {activeTab === 'careers' && (
               <div className="grid gap-6">
                 {careerMatches.map((career, index) => (
-                  <motion.div
-                    key={career.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+            <motion.div
+                  key={career.id} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                  >
+                >
                     <GlassMorphicBox className="p-6">
                       <div className="flex flex-col md:flex-row md:items-start gap-6">
                         <div className="flex-1">
-                          <div className="flex justify-between items-start mb-4">
+                  <div className="flex justify-between items-start mb-4">
                             <h2 className="text-xl font-semibold">{career.title}</h2>
                             <div className="bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] rounded-full px-3 py-1 text-sm">
-                              {career.matchPercentage}% Match
-                            </div>
-                          </div>
-                          <p className="text-white/70 mb-4">{career.description}</p>
+                      {career.matchPercentage}% Match
+                    </div>
+                  </div>
+                  <p className="text-white/70 mb-4">{career.description}</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
+                    <div>
                               <h3 className="text-sm font-medium text-white/60 mb-2">Salary Range</h3>
                               <p className="text-white/90">{career.salary}</p>
-                            </div>
-                            <div>
+                    </div>
+                    <div>
                               <h3 className="text-sm font-medium text-white/60 mb-2">Growth Rate</h3>
                               <p className="text-white/90">{career.growth}</p>
-                            </div>
-                          </div>
+                    </div>
+                  </div>
                           <div className="space-y-4">
                             <div>
                               <h3 className="text-sm font-medium text-white/60 mb-2">Key Skills</h3>
-                              <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2">
                                 {career.keySkills.map((skill, i) => (
                                   <span
                                     key={i}
                                     className="bg-white/10 rounded-full px-3 py-1 text-sm"
                                   >
-                                    {skill}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                             <div>
                               <h3 className="text-sm font-medium text-white/60 mb-2">Education & Requirements</h3>
                               <ul className="list-disc list-inside text-white/70 space-y-1">
@@ -214,12 +213,12 @@ export default function Results({ userProfile }: ResultsProps) {
                           </div>
                         </div>
                       </div>
-                    </GlassMorphicBox>
+                </GlassMorphicBox>
                   </motion.div>
-                ))}
+              ))}
               </div>
             )}
-          </motion.div>
+            </motion.div>
         </AnimatePresence>
       </div>
     </div>

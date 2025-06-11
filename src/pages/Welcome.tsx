@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import GradientButton from '../components/GradientButton';
 import { motion } from 'framer-motion';
+import GlassMorphicBox from '../components/GlassMorphicBox';
 
 interface WelcomeProps {
   onSetUserName: (name: string) => void;
@@ -20,45 +20,32 @@ export default function Welcome({ onSetUserName }: WelcomeProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 md:p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-[600px]"
       >
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-transparent bg-clip-text">
-            Welcome to GYDR
-          </h1>
-          <p className="text-white/60">
-            Guide Your Dream Role - Discover your perfect career path through personalized assessments
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-white/80 mb-2">
-              What's your name?
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setError('');
-              }}
-              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-[#6366f1] focus:border-transparent transition-colors"
-              placeholder="Enter your name"
-            />
-            {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
+        <GlassMorphicBox>
+          <div className="text-center">
+            <h1 className="text-3xl md:text-[48px] font-normal mb-4">
+              Glass Morphism
+            </h1>
+            <p className="text-[#8B9FBF] text-base md:text-lg max-w-[80%] mx-auto">
+              Skyline Motions presents, an awesome looking
+              glass morphism effect that is super
+              easy to create in after effects.
+            </p>
           </div>
 
-          <GradientButton type="submit" className="w-full">
-            Get Started
-          </GradientButton>
-        </form>
+          <button
+            onClick={() => onSetUserName('Demo User')}
+            className="w-full mt-8 py-3 px-6 bg-transparent border border-white/20 rounded-full text-white hover:bg-white/5 transition-colors"
+          >
+            Start
+          </button>
+        </GlassMorphicBox>
       </motion.div>
     </div>
   );
