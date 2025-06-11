@@ -52,7 +52,6 @@ export default function App() {
                   <Dashboard 
                     userName={userName}
                     userProfile={userProfile}
-                    updateUserProfile={updateUserProfile}
                   />
                 ) : (
                   <Navigate to="/welcome" replace />
