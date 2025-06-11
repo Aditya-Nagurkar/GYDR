@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import GlassMorphicBox from '../components/GlassMorphicBox';
 
@@ -7,18 +6,6 @@ interface WelcomeProps {
 }
 
 export default function Welcome({ onSetUserName }: WelcomeProps) {
-  const [name, setName] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name.trim().length < 2) {
-      setError('Please enter a valid name (minimum 2 characters)');
-      return;
-    }
-    onSetUserName(name.trim());
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center p-4 md:p-6">
       <motion.div
