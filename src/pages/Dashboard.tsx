@@ -11,10 +11,9 @@ import { useState, useEffect } from 'react';
 interface DashboardProps {
   userName: string;
   userProfile: UserProfile;
-  updateUserProfile: (data: Partial<UserProfile>) => void;
 }
 
-export default function Dashboard({ userName, userProfile, updateUserProfile }: DashboardProps) {
+export default function Dashboard({ userName, userProfile }: DashboardProps) {
   const navigate = useNavigate();
   const [careerMatches, setCareerMatches] = useState<CareerRecommendation[]>([]);
 

@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
-import Landing from './pages/Landing';
+import Welcome from './pages/Welcome';
 import Dashboard from './pages/Dashboard';
 import Assessment from './pages/Assessment';
 import Results from './pages/Results';
@@ -9,6 +9,7 @@ import { mockUserProfile } from './data/mockData';
 
 export default function AppRoutes() {
   const [userProfile, setUserProfile] = useState<UserProfile>(mockUserProfile);
+  const [userName, setUserName] = useState<string>('');
 
   const updateUserProfile = (data: Partial<UserProfile>) => {
     setUserProfile(prev => ({
@@ -19,12 +20,13 @@ export default function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
+      <Route path="/" element={<Welcome onSetUserName={setUserName} />} />
       <Route 
         path="/dashboard" 
         element={
           <Dashboard 
             userProfile={userProfile}
+            userName={userName}
           />
         } 
       />
