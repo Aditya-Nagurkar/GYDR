@@ -11,17 +11,11 @@ import { useState, useEffect } from 'react';
 interface DashboardProps {
   userName: string;
   userProfile: UserProfile;
+  updateUserProfile: (data: Partial<UserProfile>) => void;
 }
 
-export default function Dashboard({ userName, userProfile }: DashboardProps) {
+export default function Dashboard({ userName, userProfile, updateUserProfile }: DashboardProps) {
   const navigate = useNavigate();
-  const [careerMatches, setCareerMatches] = useState<CareerRecommendation[]>([]);
-
-  useEffect(() => {
-    // Calculate career matches when userProfile changes
-    const matches = calculateCareerMatches(userProfile, mockCareerRecommendations);
-    setCareerMatches(matches);
-  }, [userProfile]);
 
   const getAssessmentIcon = (icon: string) => {
     switch (icon) {
@@ -43,8 +37,6 @@ export default function Dashboard({ userName, userProfile }: DashboardProps) {
   const getNextIncompleteAssessment = () => {
     return mockAssessments.find(assessment => !isAssessmentCompleted(assessment.id));
   };
-
-  const allAssessmentsCompleted = userProfile.completedAssessments.length === userProfile.totalAssessments;
 
   return (
     <div className="min-h-screen p-6 font-['Inter']">

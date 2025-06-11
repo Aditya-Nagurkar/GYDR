@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import GlassMorphicBox from '../components/GlassMorphicBox';
 import { useNavigate } from 'react-router-dom';
@@ -8,18 +7,7 @@ interface WelcomeProps {
 }
 
 export default function Welcome({ onSetUserName }: WelcomeProps) {
-  const [name, setName] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name.trim().length < 2) {
-      setError('Please enter a valid name (minimum 2 characters)');
-      return;
-    }
-    onSetUserName(name.trim());
-  };
 
   const handleStart = () => {
     onSetUserName('Demo User');
