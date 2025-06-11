@@ -1,12 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import GlassMorphicBox from '../components/GlassMorphicBox';
-import GradientButton from '../components/GradientButton';
-import { mockAssessments, mockCareerRecommendations } from '../data/mockData';
-import { UserProfile, CareerRecommendation } from '../types';
-import { Brain, Code2, Heart, ArrowRight } from 'lucide-react';
-import { calculateCareerMatches } from '../utils/careerMatching';
-import { useState, useEffect } from 'react';
+import { mockAssessments } from '../data/mockData';
+import { UserProfile } from '../types';
+import { Brain, Code2, Heart } from 'lucide-react';
+import { useState } from 'react';
 
 interface DashboardProps {
   userName: string;
