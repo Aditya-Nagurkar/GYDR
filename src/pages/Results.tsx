@@ -6,9 +6,9 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, PieChart, Pie, Cell, Tooltip, PolarRadiusAxis
 } from 'recharts';
 import GlassMorphicBox from '../components/GlassMorphicBox';
-import { UserProfile, CareerRecommendation } from '../types';
+import { UserProfile } from '../types';
 import { ArrowLeft } from 'lucide-react';
-import { getCareerRecommendations, getPersonalityAnalysis } from '../utils/geminiApi';
+import { getPersonalityAnalysis } from '../utils/geminiApi';
 
 interface ResultsProps {
   userProfile: UserProfile;
@@ -18,28 +18,16 @@ const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#facc15'
 
 export default function Results({ userProfile }: ResultsProps) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'personality' | 'skills' | 'careers'>('personality');
-  const [careerMatches, setCareerMatches] = useState<CareerRecommendation[]>([]);
+  const [activeTab, setActiveTab] = useState<'personality' | 'skills'>('personality');
   const [personalityAnalysis, setPersonalityAnalysis] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        setError(null);
-        const [matches, analysis] = await Promise.all([
-          getCareerRecommendations(userProfile),
-          getPersonalityAnalysis(userProfile)
-        ]);
-    setCareerMatches(matches);
+        const analysis = await getPersonalityAnalysis(userProfile);
         setPersonalityAnalysis(analysis);
       } catch (err) {
-        setError('Failed to get recommendations. Please try again later.');
         console.error('Error fetching data:', err);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -66,7 +54,7 @@ export default function Results({ userProfile }: ResultsProps) {
               outerRadius="70%"
               fill="#8884d8"
               dataKey="value"
-              label={({ name, value, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+              label={({ name, value, cx, cy, midAngle, outerRadius }) => {
                 const RADIAN = Math.PI / 180;
                 const radius = outerRadius * 1.2;
                 const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -86,7 +74,7 @@ export default function Results({ userProfile }: ResultsProps) {
                 );
               }}
             >
-              {personalityData.map((entry, index) => (
+              {personalityData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

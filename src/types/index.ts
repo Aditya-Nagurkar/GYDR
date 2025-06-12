@@ -44,4 +44,5 @@ export interface UserProfile {
   }[];
   interests: string[];
   completedAssessments: string[];
+  careerMatch?: CareerRecommendation;
 }
