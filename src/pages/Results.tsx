@@ -6,9 +6,9 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar, PieChart, Pie, Cell, Tooltip, PolarRadiusAxis
 } from 'recharts';
 import GlassMorphicBox from '../components/GlassMorphicBox';
-import { UserProfile } from '../types';
+import { UserProfile, CareerRecommendation } from '../types';
 import { ArrowLeft } from 'lucide-react';
-import { getPersonalityAnalysis } from '../utils/geminiApi';
+import { getPersonalityAnalysis, getCareerRecommendations } from '../utils/geminiApi';
 
 interface ResultsProps {
   userProfile: UserProfile;
@@ -18,16 +18,25 @@ const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#facc15'
 
 export default function Results({ userProfile }: ResultsProps) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'personality' | 'skills'>('personality');
+  const [activeTab, setActiveTab] = useState<'personality' | 'skills' | 'careers'>('personality');
   const [personalityAnalysis, setPersonalityAnalysis] = useState<string>('');
+  const [careerMatches, setCareerMatches] = useState<CareerRecommendation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const analysis = await getPersonalityAnalysis(userProfile);
+        setIsLoading(true);
+        const [analysis, careers] = await Promise.all([
+          getPersonalityAnalysis(userProfile),
+          getCareerRecommendations(userProfile)
+        ]);
         setPersonalityAnalysis(analysis);
+        setCareerMatches(careers);
       } catch (err) {
         console.error('Error fetching data:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -217,6 +226,16 @@ export default function Results({ userProfile }: ResultsProps) {
           >
             Skills
           </button>
+          <button
+            className={`flex-1 px-4 py-2 rounded-lg text-sm sm:text-base transition-colors ${
+              activeTab === 'careers'
+                ? 'bg-[#8B5CF6] text-white'
+                : 'bg-white/10 text-white/60 hover:bg-white/20'
+            }`}
+            onClick={() => setActiveTab('careers')}
+          >
+            Careers
+          </button>
         </div>
 
         <AnimatePresence mode="wait">
@@ -243,6 +262,69 @@ export default function Results({ userProfile }: ResultsProps) {
               <GlassMorphicBox className="p-4 sm:p-6">
                 <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Skills Assessment Results</h2>
                 {renderSkillsChart()}
+              </GlassMorphicBox>
+            )}
+
+            {activeTab === 'careers' && (
+              <GlassMorphicBox className="p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Career Matches</h2>
+                {isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#8B5CF6]"></div>
+                  </div>
+                ) : careerMatches.length > 0 ? (
+                  <div className="space-y-4">
+                    {careerMatches.map((career) => (
+                      <div 
+                        key={career.id}
+                        className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors"
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="text-lg font-medium text-[#8B5CF6]">{career.title}</h3>
+                          <span className="text-sm font-medium bg-[#8B5CF6] px-2 py-1 rounded">
+                            {career.matchPercentage}% Match
+                          </span>
+                        </div>
+                        <p className="text-sm text-white/70 mb-3">{career.description}</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-white/50 mb-1">Salary Range</p>
+                            <p className="text-white/90">{career.salary}</p>
+                          </div>
+                          <div>
+                            <p className="text-white/50 mb-1">Growth</p>
+                            <p className="text-white/90">{career.growth}</p>
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <p className="text-white/50 mb-2">Key Skills</p>
+                          <div className="flex flex-wrap gap-2">
+                            {career.keySkills.map((skill, index) => (
+                              <span 
+                                key={index}
+                                className="text-xs bg-white/10 text-white/90 px-2 py-1 rounded"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <p className="text-white/50 mb-2">Required Education</p>
+                          <ul className="list-disc list-inside text-sm text-white/90 space-y-1">
+                            {career.education.map((edu, index) => (
+                              <li key={index}>{edu}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-white/60 py-8">
+                    No career matches found. Please complete all assessments.
+                  </p>
+                )}
               </GlassMorphicBox>
             )}
           </motion.div>
