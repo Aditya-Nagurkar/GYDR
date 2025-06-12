@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "dotenv": "^16.5.0",
+=======
+>>>>>>> 5c6183950ce29474cbb104c3e18f9b1c4347f3e8
     "framer-motion": "^12.17.0",
     "lucide-react": "^0.514.0",
     "react": "^18.2.0",
@@ -20,10 +23,16 @@
   },
   "devDependencies": {
     "@getmocha/vite-plugins": "latest",
+<<<<<<< HEAD
     "@types/node": "^24.0.1",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react": "^4.5.2",
+=======
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@vitejs/plugin-react": "^4.3.1",
+>>>>>>> 5c6183950ce29474cbb104c3e18f9b1c4347f3e8
     "autoprefixer": "^10.4.20",
     "globals": "^15.9.0",
     "postcss": "^8.4.47",
