@@ -163,9 +163,9 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
     }
   };
 
-  if (!currentQuestion) return null;
+    if (!currentQuestion) return null;
 
-  return (
+        return (
     <div className="min-h-screen p-4 sm:p-6 lg:p-8">
       <div className="max-w-2xl mx-auto">
         <button
@@ -201,28 +201,28 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
           {currentQuestion.type === 'scale' && (
             <div className="space-y-4 sm:space-y-6">
               <div className="flex justify-between text-xs sm:text-sm text-white/60">
-                <span>{currentQuestion.minLabel}</span>
-                <span>{currentQuestion.maxLabel}</span>
-              </div>
+              <span>{currentQuestion.minLabel}</span>
+              <span>{currentQuestion.maxLabel}</span>
+            </div>
               <div className="flex justify-between gap-1.5 sm:gap-2">
                 {Array.from({ length: (currentQuestion.max || 5) - (currentQuestion.min || 1) + 1 }).map((_, index) => {
                   const value = (currentQuestion.min || 1) + index;
-                  return (
-                    <button
+                return (
+                  <button
                       key={value}
                       className={`flex-1 py-2 sm:py-3 rounded-lg text-sm sm:text-base transition-colors ${
                         answers[currentQuestion.id] === value
                           ? 'bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white'
                           : 'bg-white/10 text-white/60 hover:bg-white/20'
-                      }`}
+                    }`}
                       onClick={() => handleAnswer(value)}
-                    >
-                      {value}
-                    </button>
-                  );
-                })}
-              </div>
+                  >
+                    {value}
+                  </button>
+                );
+              })}
             </div>
+          </div>
           )}
 
           {currentQuestion.type === 'choice' && (
@@ -240,7 +240,7 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
                   {option}
                 </button>
               ))}
-            </div>
+          </div>
           )}
 
           {currentQuestion.type === 'multiselect' && (
@@ -290,13 +290,13 @@ export default function Assessment({ userProfile, updateUserProfile }: Assessmen
           >
             Previous
           </button>
-          <button
-            onClick={handleNext}
+                  <button
+                    onClick={handleNext}
             className="flex-1 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] rounded-lg text-sm sm:text-base font-medium text-white hover:opacity-90 transition-opacity"
-          >
+                  >
             {currentQuestionIndex === questions.length - 1 ? 'Complete Assessment' : 'Next Question'}
-          </button>
-        </div>
+                  </button>
+                </div>
       </div>
     </div>
   );

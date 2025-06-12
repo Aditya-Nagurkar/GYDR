@@ -49,12 +49,12 @@ export default function App() {
               path="/" 
               element={userName ? <Navigate to="/dashboard" /> : <Welcome onSetUserName={handleSetUserName} />} 
             />
-            <Route 
+            <Route
               path="/dashboard" 
               element={userName ? <Dashboard userName={userName} userProfile={userProfile} /> : <Navigate to="/" />} 
             />
             <Route 
-              path="/assessment" 
+              path="/assessment/:id" 
               element={userName ? <Assessment userProfile={userProfile} updateUserProfile={updateUserProfile} /> : <Navigate to="/" />} 
             />
             <Route 

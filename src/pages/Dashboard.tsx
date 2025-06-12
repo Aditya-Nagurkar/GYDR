@@ -73,67 +73,67 @@ export default function Dashboard({ userName, userProfile }: DashboardProps) {
             </div>
           </GlassMorphicBox>
         ) : (
-          <GlassMorphicBox className="p-6 md:p-8">
-            <h2 className="text-lg md:text-xl font-medium mb-6">Your Progress</h2>
-            <div className="mb-6">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-[#94A3B8]">Assessments Completed</span>
-                <span className="text-white">
-                  {userProfile.completedAssessments.length} of {userProfile.totalAssessments}
-                </span>
-              </div>
-              <div className="h-1 bg-[rgba(255,255,255,0.1)] rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-[#8B5CF6]"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(userProfile.completedAssessments.length / userProfile.totalAssessments) * 100}%` }}
-                  transition={{ duration: 0.5 }}
-                />
-              </div>
+        <GlassMorphicBox className="p-6 md:p-8">
+          <h2 className="text-lg md:text-xl font-medium mb-6">Your Progress</h2>
+          <div className="mb-6">
+            <div className="flex justify-between text-sm mb-2">
+              <span className="text-[#94A3B8]">Assessments Completed</span>
+              <span className="text-white">
+                {userProfile.completedAssessments.length} of {userProfile.totalAssessments}
+              </span>
             </div>
+            <div className="h-1 bg-[rgba(255,255,255,0.1)] rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-[#8B5CF6]"
+                initial={{ width: 0 }}
+                animate={{ width: `${(userProfile.completedAssessments.length / userProfile.totalAssessments) * 100}%` }}
+                transition={{ duration: 0.5 }}
+              />
+            </div>
+          </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6">
-              {mockAssessments.map((assessment) => {
-                const completed = isAssessmentCompleted(assessment.id);
-                return (
-                  <div
-                    key={assessment.id}
-                    className={`p-3 md:p-4 rounded-2xl ${
-                      completed 
-                        ? 'bg-[rgba(139,92,246,0.1)] border border-[rgba(139,92,246,0.2)]' 
-                        : 'bg-[rgba(255,255,255,0.05)]'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 md:gap-3">
-                      <div className={`p-2 rounded-xl ${
-                        completed ? 'bg-[#8B5CF6]' : 'bg-[rgba(255,255,255,0.1)]'
-                      }`}>
-                        {getAssessmentIcon(assessment.icon)}
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium">{assessment.title}</h3>
-                        {completed && (
-                          <span className="text-xs text-[#8B5CF6]">Completed</span>
-                        )}
-                      </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6">
+            {mockAssessments.map((assessment) => {
+              const completed = isAssessmentCompleted(assessment.id);
+              return (
+                <div
+                  key={assessment.id}
+                  className={`p-3 md:p-4 rounded-2xl ${
+                    completed 
+                      ? 'bg-[rgba(139,92,246,0.1)] border border-[rgba(139,92,246,0.2)]' 
+                      : 'bg-[rgba(255,255,255,0.05)]'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className={`p-2 rounded-xl ${
+                      completed ? 'bg-[#8B5CF6]' : 'bg-[rgba(255,255,255,0.1)]'
+                    }`}>
+                      {getAssessmentIcon(assessment.icon)}
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium">{assessment.title}</h3>
+                      {completed && (
+                        <span className="text-xs text-[#8B5CF6]">Completed</span>
+                      )}
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
+          </div>
 
-            <button
-              onClick={() => {
-                const nextAssessment = getNextIncompleteAssessment();
-                if (nextAssessment) {
-                  navigate(`/assessment/${nextAssessment.id}`);
-                }
-              }}
-              className="w-full py-3 md:py-4 bg-[#8B5CF6] hover:bg-[#7C3AED] rounded-2xl font-medium transition-colors text-sm md:text-base"
-            >
-              Continue Assessment
-            </button>
-          </GlassMorphicBox>
+          <button
+            onClick={() => {
+              const nextAssessment = getNextIncompleteAssessment();
+              if (nextAssessment) {
+                navigate(`/assessment/${nextAssessment.id}`);
+              }
+            }}
+            className="w-full py-3 md:py-4 bg-[#8B5CF6] hover:bg-[#7C3AED] rounded-2xl font-medium transition-colors text-sm md:text-base"
+          >
+            Continue Assessment
+          </button>
+        </GlassMorphicBox>
         )}
 
         <div>

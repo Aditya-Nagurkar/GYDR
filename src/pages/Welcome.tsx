@@ -63,14 +63,14 @@ export default function Welcome({ onSetUserName }: WelcomeProps) {
                   {error}
                 </motion.p>
               )}
-            </div>
+          </div>
 
-            <button
+          <button
               type="submit"
               className="w-full py-3 sm:py-4 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] rounded-lg font-medium text-sm sm:text-base hover:opacity-90 transition-opacity"
-            >
+          >
               Get Started
-            </button>
+          </button>
           </form>
         </GlassMorphicBox>
       </div>
