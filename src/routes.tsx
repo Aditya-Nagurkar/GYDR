@@ -44,6 +44,7 @@ export default function AppRoutes() {
         element={
           <Results 
             userProfile={userProfile}
+            updateUserProfile={updateUserProfile}
           />
         } 
       />
