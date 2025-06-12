@@ -12,11 +12,12 @@ import { getPersonalityAnalysis, getCareerRecommendations } from '../utils/gemin
 
 interface ResultsProps {
   userProfile: UserProfile;
+  updateUserProfile: (data: Partial<UserProfile>) => void;
 }
 
 const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#facc15', '#84cc16', '#10b981'];
 
-export default function Results({ userProfile }: ResultsProps) {
+export default function Results({ userProfile, updateUserProfile }: ResultsProps) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'personality' | 'skills' | 'careers'>('personality');
   const [personalityAnalysis, setPersonalityAnalysis] = useState<string>('');
@@ -33,6 +34,11 @@ export default function Results({ userProfile }: ResultsProps) {
         ]);
         setPersonalityAnalysis(analysis);
         setCareerMatches(careers);
+        
+        // Update the user profile with the best career match
+        if (careers.length > 0) {
+          updateUserProfile({ careerMatch: careers[0] });
+        }
       } catch (err) {
         console.error('Error fetching data:', err);
       } finally {
@@ -41,7 +47,7 @@ export default function Results({ userProfile }: ResultsProps) {
     };
 
     fetchData();
-  }, [userProfile]);
+  }, [userProfile, updateUserProfile]);
 
   const renderPersonalityChart = () => {
     const personalityData = userProfile.personalityTraits
@@ -205,32 +211,32 @@ export default function Results({ userProfile }: ResultsProps) {
           </p>
         </header>
 
-        <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row items-stretch gap-3 mb-6 bg-white/5 p-1.5 rounded-xl">
           <button
-            className={`flex-1 px-4 py-2 rounded-lg text-sm sm:text-base transition-colors ${
+            className={`flex-1 px-4 py-3 rounded-lg text-sm sm:text-base font-medium transition-all duration-200 ${
               activeTab === 'personality'
-                ? 'bg-[#8B5CF6] text-white'
-                : 'bg-white/10 text-white/60 hover:bg-white/20'
+                ? 'bg-[#8B5CF6] text-white shadow-lg shadow-[#8B5CF6]/25'
+                : 'text-white/60 hover:text-white hover:bg-white/5'
             }`}
             onClick={() => setActiveTab('personality')}
           >
             Personality
           </button>
           <button
-            className={`flex-1 px-4 py-2 rounded-lg text-sm sm:text-base transition-colors ${
+            className={`flex-1 px-4 py-3 rounded-lg text-sm sm:text-base font-medium transition-all duration-200 ${
               activeTab === 'skills'
-                ? 'bg-[#8B5CF6] text-white'
-                : 'bg-white/10 text-white/60 hover:bg-white/20'
+                ? 'bg-[#8B5CF6] text-white shadow-lg shadow-[#8B5CF6]/25'
+                : 'text-white/60 hover:text-white hover:bg-white/5'
             }`}
             onClick={() => setActiveTab('skills')}
           >
             Skills
           </button>
           <button
-            className={`flex-1 px-4 py-2 rounded-lg text-sm sm:text-base transition-colors ${
+            className={`flex-1 px-4 py-3 rounded-lg text-sm sm:text-base font-medium transition-all duration-200 ${
               activeTab === 'careers'
-                ? 'bg-[#8B5CF6] text-white'
-                : 'bg-white/10 text-white/60 hover:bg-white/20'
+                ? 'bg-[#8B5CF6] text-white shadow-lg shadow-[#8B5CF6]/25'
+                : 'text-white/60 hover:text-white hover:bg-white/5'
             }`}
             onClick={() => setActiveTab('careers')}
           >

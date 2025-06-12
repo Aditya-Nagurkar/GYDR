@@ -47,53 +47,20 @@ export default function App() {
           <Routes>
             <Route 
               path="/" 
-              element={
-                userName ? (
-                  <Dashboard 
-                    userName={userName}
-                    userProfile={userProfile}
-                  />
-                ) : (
-                  <Navigate to="/welcome" replace />
-                )
-              } 
-            />
-            <Route
-              path="/welcome"
-              element={
-                userName ? (
-                  <Navigate to="/" replace />
-                ) : (
-                  <Welcome onSetUserName={handleSetUserName} />
-                )
-              }
+              element={userName ? <Navigate to="/dashboard" /> : <Welcome onSetUserName={handleSetUserName} />} 
             />
             <Route 
-              path="/assessment/:id" 
-              element={
-                userName ? (
-                  <Assessment 
-                    userProfile={userProfile}
-                    updateUserProfile={updateUserProfile}
-                  />
-                ) : (
-                  <Navigate to="/welcome" replace />
-                )
-              } 
+              path="/dashboard" 
+              element={userName ? <Dashboard userName={userName} userProfile={userProfile} /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/assessment" 
+              element={userName ? <Assessment userProfile={userProfile} updateUserProfile={updateUserProfile} /> : <Navigate to="/" />} 
             />
             <Route 
               path="/results" 
-              element={
-                userName ? (
-                  <Results 
-                    userProfile={userProfile}
-                  />
-                ) : (
-                  <Navigate to="/welcome" replace />
-                )
-              } 
+              element={userName ? <Results userProfile={userProfile} updateUserProfile={updateUserProfile} /> : <Navigate to="/" />} 
             />
-            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </div>
