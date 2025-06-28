@@ -28,10 +28,20 @@ export default function Results({ userProfile, updateUserProfile }: ResultsProps
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        
+        // Check localStorage for existing analysis
+        const storedAnalysis = localStorage.getItem('personalityAnalysis');
+        
         const [analysis, careers] = await Promise.all([
-          getPersonalityAnalysis(userProfile),
+          storedAnalysis ? Promise.resolve(storedAnalysis) : getPersonalityAnalysis(userProfile),
           getCareerRecommendations(userProfile)
         ]);
+
+        // Store new analysis if it was generated
+        if (!storedAnalysis) {
+          localStorage.setItem('personalityAnalysis', analysis);
+        }
+
         setPersonalityAnalysis(analysis);
         setCareerMatches(careers);
         
@@ -176,14 +186,14 @@ export default function Results({ userProfile, updateUserProfile }: ResultsProps
             />
           </RadarChart>
         </ResponsiveContainer>
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4">
+        <div className="mt-8 grid grid-cols-4 gap-y-3 max-w-2xl mx-auto px-4">
           {skillsData.map((skill, index) => (
             <div key={index} className="flex items-center gap-2">
               <div 
-                className="w-2 h-2 sm:w-3 sm:h-3 rounded-full" 
+                className="w-2 h-2 rounded-full shrink-0" 
                 style={{ backgroundColor: '#6366f1' }}
               />
-              <span className="text-xs sm:text-sm text-white/70">
+              <span className="text-sm text-white/70 truncate">
                 {skill.subject}: {skill.score}/5
               </span>
             </div>
