@@ -23,22 +23,29 @@ export default function Results({ userProfile, updateUserProfile }: ResultsProps
   const [personalityAnalysis, setPersonalityAnalysis] = useState<string>('');
   const [careerMatches, setCareerMatches] = useState<CareerRecommendation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        setError('');
+        console.log('Fetching data with userProfile:', userProfile);
         
         // Check localStorage for existing analysis
         const storedAnalysis = localStorage.getItem('personalityAnalysis');
+        console.log('Stored analysis:', storedAnalysis);
         
         const [analysis, careers] = await Promise.all([
           storedAnalysis ? Promise.resolve(storedAnalysis) : getPersonalityAnalysis(userProfile),
           getCareerRecommendations(userProfile)
         ]);
 
+        console.log('Fetched analysis:', analysis);
+        console.log('Fetched careers:', careers);
+
         // Store new analysis if it was generated
-        if (!storedAnalysis) {
+        if (!storedAnalysis && analysis) {
           localStorage.setItem('personalityAnalysis', analysis);
         }
 
@@ -46,17 +53,31 @@ export default function Results({ userProfile, updateUserProfile }: ResultsProps
         setCareerMatches(careers);
         
         // Update the user profile with the best career match
-        if (careers.length > 0) {
+        if (careers && careers.length > 0) {
+          console.log('Updating user profile with best match:', careers[0]);
           updateUserProfile({ careerMatch: careers[0] });
         }
       } catch (err) {
         console.error('Error fetching data:', err);
+        setError('Failed to load results. Please try again later.');
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchData();
+    // Only fetch if we have personality traits and skills
+    if (userProfile.personalityTraits.some(trait => trait.score > 0) && 
+        userProfile.skills.some(skill => skill.score > 0)) {
+      console.log('User profile has required data, fetching...');
+      fetchData();
+    } else {
+      console.log('User profile missing required data:', {
+        hasPersonality: userProfile.personalityTraits.some(trait => trait.score > 0),
+        hasSkills: userProfile.skills.some(skill => skill.score > 0)
+      });
+      setError('Please complete the personality and skills assessments first.');
+      setIsLoading(false);
+    }
   }, [userProfile, updateUserProfile]);
 
   const renderPersonalityChart = () => {
@@ -288,6 +309,8 @@ export default function Results({ userProfile, updateUserProfile }: ResultsProps
                   <div className="flex items-center justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#8B5CF6]"></div>
                   </div>
+                ) : error ? (
+                  <p className="text-center text-white/60 py-8">{error}</p>
                 ) : careerMatches.length > 0 ? (
                   <div className="space-y-4">
                     {careerMatches.map((career) => (

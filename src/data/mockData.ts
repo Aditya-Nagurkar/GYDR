@@ -1067,28 +1067,28 @@ export const mockCareerRecommendations: CareerRecommendation[] = [
 
 export const mockUserProfile: UserProfile = {
   name: '',
-  assessmentsCompleted: 0,
+  assessmentsCompleted: 1,
   totalAssessments: 3,
   personalityTraits: [
-    { trait: 'Openness', score: 0 },
-    { trait: 'Conscientiousness', score: 0 },
-    { trait: 'Extraversion', score: 0 },
-    { trait: 'Agreeableness', score: 0 },
-    { trait: 'Neuroticism', score: 0 },
-    { trait: 'Problem Solving', score: 0 },
-    { trait: 'Creativity', score: 0 },
-    { trait: 'Leadership', score: 0 }
+    { trait: 'Openness', score: 4 },
+    { trait: 'Conscientiousness', score: 3 },
+    { trait: 'Extraversion', score: 3 },
+    { trait: 'Agreeableness', score: 4 },
+    { trait: 'Neuroticism', score: 2 },
+    { trait: 'Problem Solving', score: 4 },
+    { trait: 'Creativity', score: 3 },
+    { trait: 'Leadership', score: 3 }
   ],
   skills: [
-    { category: 'Technical', score: 0 },
-    { category: 'Communication', score: 0 },
-    { category: 'Leadership', score: 0 },
-    { category: 'Creativity', score: 0 },
-    { category: 'Analytical', score: 0 },
-    { category: 'Project Management', score: 0 },
-    { category: 'Problem Solving', score: 0 },
-    { category: 'Teamwork', score: 0 }
+    { category: 'Technical', score: 4 },
+    { category: 'Communication', score: 3 },
+    { category: 'Leadership', score: 3 },
+    { category: 'Creativity', score: 4 },
+    { category: 'Analytical', score: 4 },
+    { category: 'Project Management', score: 3 },
+    { category: 'Problem Solving', score: 4 },
+    { category: 'Teamwork', score: 3 }
   ],
-  interests: [],
-  completedAssessments: []
+  interests: ['Technology', 'Innovation', 'Problem Solving'],
+  completedAssessments: ['personality']
 };

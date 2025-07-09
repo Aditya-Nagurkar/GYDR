@@ -1,11 +1,12 @@
 import { UserProfile, CareerRecommendation } from '../types';
 import { mockCareerRecommendations } from '../data/mockData';
 
+// Force USE_MOCK_DATA to true for now
+const USE_MOCK_DATA = true;
+console.info('Using mock data for Gemini API responses');
+
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-if (!GEMINI_API_KEY) {
-  throw new Error('VITE_GEMINI_API_KEY is not defined in environment variables');
-}
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
 // Helper function to normalize strings for comparison
 function normalizeString(str: string): string {
@@ -50,7 +51,55 @@ function findBestMatchingCareer(title: string, mockCareers: CareerRecommendation
   return null;
 }
 
+// Helper function to generate mock career recommendations
+function generateMockCareerRecommendations(userProfile: UserProfile): CareerRecommendation[] {
+  // Get the top skills
+  const topSkills = [...userProfile.skills]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(skill => skill.category.toLowerCase());
+
+  // Filter and score careers based on skills match
+  return mockCareerRecommendations
+    .map(career => {
+      const matchingSkills = career.keySkills
+        .filter(skill => 
+          topSkills.some(userSkill => 
+            skill.toLowerCase().includes(userSkill) || 
+            userSkill.includes(skill.toLowerCase())
+          )
+        );
+      
+      const matchPercentage = Math.min(100, Math.round((matchingSkills.length / topSkills.length) * 100));
+      
+      return {
+        ...career,
+        matchPercentage: matchPercentage
+      };
+    })
+    .filter(career => career.matchPercentage > 0)
+    .sort((a, b) => b.matchPercentage - a.matchPercentage)
+    .slice(0, 5);
+}
+
+// Helper function to generate mock personality analysis
+function generateMockPersonalityAnalysis(userProfile: UserProfile): string {
+  const topTraits = userProfile.personalityTraits
+    .filter(trait => trait.score >= 4)
+    .map(trait => trait.trait.toLowerCase());
+
+  const traits = topTraits.length > 0 
+    ? topTraits.join(', ') 
+    : 'balanced personality traits';
+
+  return `You demonstrate strong ${traits}. Your assessment results indicate that you have a well-rounded profile with potential for growth in various professional domains. Your combination of skills and traits positions you well for roles that align with your strengths.`;
+}
+
 export async function getCareerRecommendations(userProfile: UserProfile): Promise<CareerRecommendation[]> {
+  if (USE_MOCK_DATA) {
+    return generateMockCareerRecommendations(userProfile);
+  }
+
   try {
     // Prepare the prompt for Gemini
     const prompt = `You are a career recommendation system. Based on the following user assessment data, analyze and recommend the most suitable careers from this list of available careers:
@@ -195,6 +244,10 @@ Return ONLY the JSON array, no other text.`;
 }
 
 export async function getPersonalityAnalysis(userProfile: UserProfile): Promise<string> {
+  if (USE_MOCK_DATA) {
+    return generateMockPersonalityAnalysis(userProfile);
+  }
+
   try {
     const prompt = `Based on the following personality trait scores, provide a brief, positive, and professional 2-3 sentence analysis of the person's personality. Write directly to the person using "you" and "your". Focus on their strengths and potential.
 
